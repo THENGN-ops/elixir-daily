@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elixir Daily</title>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f0ff;--sf:#fff;--ln:#d9c8f5;--tx:#25104a;--mu:#6b559a;--ac:#d61a96;--ok:#1f9d5c;--no:#c9363b;--wn:#c98a00;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b0b33;--sf:#2a1450;--ln:#4a2a82;--tx:#f4ecff;--mu:#b9a3e0;--ac:#ff3fb4;--ok:#2fbf71;--no:#e5484d;--wn:#f2b632;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b0b33;--sf:#2a1450;--ln:#4a2a82;--tx:#f4ecff;--mu:#b9a3e0;--ac:#ff3fb4;--ok:#2fbf71;--no:#e5484d;--wn:#f2b632;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:500 16px/1.5 Nunito,system-ui,sans-serif}
+main{max-width:560px;margin:0 auto;padding:20px 16px 40px}
+h1{font:400 40px/1 "Lilita One",Nunito,sans-serif;margin:0;letter-spacing:.5px}
+.sub{color:var(--mu);margin:4px 0 16px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.stats{text-align:right;font-weight:800;font-size:14px;color:var(--mu)}
+.stats b{color:var(--tx);font-size:18px}
+.bar{display:flex;gap:4px;margin:6px 0 4px}
+.pip{flex:1;height:18px;border-radius:5px;background:var(--sf);border:2px solid var(--ln);transition:background .4s}
+.pip.on{background:var(--ac);border-color:var(--ac)}
+.cap{font-size:14px;color:var(--mu);margin-bottom:16px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;padding:10px 4px;border-radius:10px;border:2px solid var(--ln);background:var(--sf);color:var(--tx);font:800 13px Nunito,sans-serif;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ac);border-color:var(--ac);color:#fff}
+button:focus-visible,input:focus-visible{outline:3px solid var(--wn);outline-offset:2px}
+.card{background:var(--sf);border:2px solid var(--ln);border-radius:14px;padding:16px}
+.row{display:flex;gap:8px;margin-top:10px}
+input{flex:1;min-width:0;padding:11px 12px;border-radius:10px;border:2px solid var(--ln);background:var(--bg);color:var(--tx);font:700 16px Nunito,sans-serif}
+.go{padding:11px 18px;border-radius:10px;border:0;background:var(--ac);color:#fff;font:800 16px Nunito,sans-serif;cursor:pointer}
+.go:disabled{opacity:.5;cursor:default}
+.g{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:6px;margin-top:8px;font-weight:800;font-size:14px}
+.g.h{color:var(--mu);font-size:13px;margin-top:14px}
+.t{padding:8px 6px;border-radius:8px;text-align:center;background:var(--bg);border:2px solid var(--ln);overflow-wrap:anywhere}
+.t.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.t.no{background:var(--no);border-color:var(--no);color:#fff}
+.msg{margin-top:14px;font-weight:800}
+.ev{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--ln);font-weight:700}
+.ev span:first-child{color:var(--mu);font-variant-numeric:tabular-nums}
+.nums{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}
+.nums button{padding:12px 0;border-radius:10px;border:2px solid var(--ln);background:var(--bg);color:var(--tx);font:800 18px Nunito,sans-serif;cursor:pointer}
+.nums button:hover{border-color:var(--ac)}
+.chest{margin-top:18px;text-align:center}
+.chest .go{font-size:18px;padding:14px 26px}
+.reward{font:400 22px "Lilita One",Nunito,sans-serif;margin:8px 0}
+.titles{margin-top:18px;color:var(--mu);font-size:14px}
+.titles span{display:inline-block;background:var(--sf);border:2px solid var(--ln);border-radius:20px;padding:2px 10px;margin:4px 4px 0 0;color:var(--tx);font-weight:700}
+pre{white-space:pre-wrap;background:var(--bg);border:2px solid var(--ln);border-radius:10px;padding:10px;font:600 14px Nunito,sans-serif}
+.small{font-size:13px;color:var(--mu)}
+.tg{background:var(--sf);color:var(--tx);border:2px solid var(--ln);border-radius:20px;padding:2px 10px;font:700 12px Nunito,sans-serif;cursor:pointer;margin-bottom:6px}
+.how{margin-bottom:14px;background:var(--sf);border:2px solid var(--ln);border-radius:12px;padding:8px 14px}
+.how summary{cursor:pointer;font-weight:800}
+.how ul{margin:8px 0 4px;padding-left:18px}
+.how li{margin-bottom:6px}
+.ad{margin-top:18px;min-height:90px;text-align:center}
+.lb{margin-top:18px}
+.lb h2{font:400 22px "Lilita One",Nunito,sans-serif;margin:0}
+.lb ol{padding-left:22px;margin:8px 0}
+footer{margin-top:30px;font-size:12px;color:var(--mu);line-height:1.5}
+@media (prefers-reduced-motion:reduce){.pip{transition:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div><h1>Elixir Daily</h1><p class="sub" id="sub"></p></div>
+    <div style="text-align:right"><button class="tg" id="tg" aria-label="Switch between light and dark theme">◐ Theme</button><div class="stats" id="stats"></div></div>
+  </div>
+  <div class="bar" id="bar" aria-label="Daily elixir progress"></div>
+  <div class="cap" id="cap"></div>
+  <details class="how"><summary>How to play</summary><ul><li><b>Guess the card:</b> you have 6 tries. Green means a match. An arrow points toward the right elixir cost or rarity.</li><li><b>Elixir count:</b> the opponent starts with 5 elixir and gains 1 every 2.8 seconds, capped at 10. Subtract each card they play and say how much they have at the end.</li><li><b>Deck detective:</b> one card is missing from a classic deck. Use the deck’s average elixir to work out which one.</li><li><b>Higher or lower:</b> 5 pairs of cards that are 1 elixir apart. Pick the one that costs more.</li><li>Finish all four to fill your elixir bar and open the daily chest for Sparks and collectible titles. Play each day to build your streak.</li></ul></details>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tab0" aria-selected="true">Guess the card</button>
+    <button role="tab" id="tab1" aria-selected="false">Elixir count</button>
+    <button role="tab" id="tab2" aria-selected="false">Deck detective</button>
+    <button role="tab" id="tab3" aria-selected="false">Higher or lower</button>
+  </div>
+  <div class="card" id="view"></div>
+  <div class="chest" id="chest"></div>
+  <!-- Ad slot: paste your ad network code here and remove the hidden attribute. Ads cannot load on the claude.ai preview page, only on a site you host. -->
+  <aside class="ad" id="ad" hidden aria-label="Advertisement"></aside>
+  <div class="titles" id="titles"></div>
+  <section class="lb" id="lb" hidden></section>
+  <footer>This content is not affiliated with, endorsed, sponsored, or specifically approved by Supercell and Supercell is not responsible for it. For more information see Supercell’s Fan Content Policy: www.supercell.com/fan-content-policy. Card data is a snapshot and may be out of date.</footer>
+</main>
+<script>
+const C=[["Knight",3,"Troop","Common"],["Archers",3,"Troop","Common"],["Goblins",2,"Troop","Common"],["Spear Goblins",2,"Troop","Common"],["Bomber",2,"Troop","Common"],["Barbarians",5,"Troop","Common"],["Minions",3,"Troop","Common"],["Minion Horde",5,"Troop","Common"],["Skeletons",1,"Troop","Common"],["Fire Spirit",1,"Troop","Common"],["Ice Spirit",1,"Troop","Common"],["Goblin Gang",3,"Troop","Common"],["Royal Giant",6,"Troop","Common"],["Skeleton Army",3,"Troop","Epic"],["Giant",5,"Troop","Rare"],["Mini P.E.K.K.A",4,"Troop","Rare"],["Musketeer",4,"Troop","Rare"],["Valkyrie",4,"Troop","Rare"],["Hog Rider",4,"Troop","Rare"],["Wizard",5,"Troop","Rare"],["Royal Hogs",5,"Troop","Rare"],["Zappies",4,"Troop","Rare"],["Dart Goblin",3,"Troop","Rare"],["Flying Machine",4,"Troop","Rare"],["Battle Ram",4,"Troop","Rare"],["Baby Dragon",4,"Troop","Epic"],["Prince",5,"Troop","Epic"],["Dark Prince",4,"Troop","Epic"],["Witch",5,"Troop","Epic"],["P.E.K.K.A",7,"Troop","Epic"],["Balloon",5,"Troop","Epic"],["Golem",8,"Troop","Epic"],["Giant Skeleton",6,"Troop","Epic"],["Goblin Giant",6,"Troop","Epic"],["Executioner",5,"Troop","Epic"],["Bowler",5,"Troop","Epic"],["Cannon Cart",5,"Troop","Epic"],["Hunter",4,"Troop","Epic"],["Guards",3,"Troop","Epic"],["Lava Hound",7,"Troop","Legendary"],["Princess",3,"Troop","Legendary"],["Ice Wizard",3,"Troop","Legendary"],["Miner",3,"Troop","Legendary"],["Sparky",6,"Troop","Legendary"],["Lumberjack",4,"Troop","Legendary"],["Night Witch",4,"Troop","Legendary"],["Bandit",3,"Troop","Legendary"],["Electro Wizard",4,"Troop","Legendary"],["Mega Knight",7,"Troop","Legendary"],["Inferno Dragon",4,"Troop","Legendary"],["Ram Rider",5,"Troop","Legendary"],["Fisherman",3,"Troop","Legendary"],["Magic Archer",4,"Troop","Legendary"],["Mother Witch",4,"Troop","Legendary"],["Phoenix",4,"Troop","Legendary"],["Royal Ghost",3,"Troop","Legendary"],["Arrows",3,"Spell","Common"],["Zap",2,"Spell","Common"],["Fireball",4,"Spell","Rare"],["Rocket",6,"Spell","Rare"],["Lightning",6,"Spell","Epic"],["Freeze",4,"Spell","Epic"],["Poison",4,"Spell","Epic"],["Rage",2,"Spell","Epic"],["Tornado",3,"Spell","Epic"],["Graveyard",5,"Spell","Legendary"],["The Log",2,"Spell","Legendary"],["Cannon",3,"Building","Common"],["Tesla",4,"Building","Common"],["Mortar",4,"Building","Common"],["Inferno Tower",5,"Building","Rare"],["Bomb Tower",4,"Building","Rare"],["Goblin Hut",5,"Building","Rare"],["Tombstone",3,"Building","Rare"],["Furnace",4,"Building","Rare"],["Elixir Collector",6,"Building","Rare"],["X-Bow",6,"Building","Epic"],["Ice Golem",2,"Troop","Rare"],["Electro Spirit",1,"Troop","Common"],["Electro Giant",7,"Troop","Epic"],["Goblin Machine",5,"Troop","Legendary"],["Royal Chef",5,"Troop","Legendary"],["Archer Queen",5,"Troop","Champion"],["Golden Knight",4,"Troop","Champion"],["Monk",5,"Troop","Champion"],["Goblin Barrel",3,"Spell","Epic"],["Giant Snowball",2,"Spell","Common"],["Vines",3,"Spell","Epic"],["Goblin Curse",2,"Spell","Epic"],["Earthquake",3,"Spell","Rare"],["Party Rocket",5,"Spell","Legendary"],["Goblin Drill",4,"Building","Epic"],["Party Hut",5,"Building","Legendary"]];
+const RO={Common:0,Rare:1,Epic:2,Legendary:3,Champion:4};
+const DECKS=[["Hog Rider cycle",["Hog Rider","Musketeer","Ice Golem","Ice Spirit","Skeletons","Cannon","Fireball","The Log"]],["Log bait",["Goblin Barrel","Princess","Goblin Gang","Knight","Inferno Tower","Rocket","Ice Spirit","The Log"]],["Golem beatdown",["Golem","Night Witch","Baby Dragon","Lumberjack","Tornado","Lightning","Zap","Barbarians"]],["Royal Giant",["Royal Giant","Fisherman","Hunter","Lightning","The Log","Dart Goblin","Skeletons","Furnace"]],["Miner control",["Miner","Poison","Knight","Bomb Tower","Skeletons","Ice Spirit","Archers","The Log"]],["Graveyard",["Graveyard","Knight","Baby Dragon","Poison","Tornado","Barbarians","Ice Wizard","Tombstone"]],["Balloon freeze",["Balloon","Freeze","Lumberjack","Tombstone","Ice Golem","Musketeer","Zap","Bomb Tower"]],["P.E.K.K.A bridge spam",["P.E.K.K.A","Battle Ram","Bandit","Royal Ghost","Electro Wizard","Poison","Zap","Magic Archer"]]];
+const TITLES=["Elixir Hoarder","Pump Enthusiast","Cycle Master","Log Bait Expert","Counter Genius","Three-Crown Thinker","Spell Sniper","Tower Whisperer"];
+const $=s=>document.querySelector(s);
+let mem=null;
+function load(){try{return JSON.parse(localStorage.getItem("ed1"))||{}}catch(e){return mem||{}}}
+function save(){try{localStorage.setItem("ed1",JSON.stringify(S))}catch(e){mem=S}}
+let S=load();S.days=S.days||{};S.streak=S.streak||0;S.pts=S.pts||0;S.titles=S.titles||[];S.last=S.last||"";
+const pad=n=>String(n).padStart(2,"0");
+const key=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const now=new Date(),K=key(now),PK=key(new Date(now.getFullYear(),now.getMonth(),now.getDate()-1));
+const num=Math.max(1,Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-new Date(2026,10,9))/864e5)+1);
+function seed(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const D=S.days[K]=S.days[K]||{g:[],e:null,d:null,chest:null};
+const R1=mulberry(seed(K+"a")),T=C[Math.floor(R1()*C.length)];
+const R2=mulberry(seed(K+"b"));
+let t=0,e=5,ev=[];
+for(let i=0;i<4;i++){
+  const gap=3+Math.floor(R2()*5);t+=gap;e=Math.min(10,e+gap/2.8);
+  while(Math.floor(e)<2){t++;e=Math.min(10,e+1/2.8)}
+  const ok=C.filter(c=>c[1]>=2&&c[1]<=Math.floor(e));
+  const c=ok[Math.floor(R2()*ok.length)];e-=c[1];ev.push([t,c[0],c[1]]);
+}
+const fg=2+Math.floor(R2()*5);t+=fg;e=Math.min(10,e+fg/2.8);
+const ANS=Math.floor(e),ENDT=t;
+const cd=n=>C.find(x=>x[0]===n);
+const R3=mulberry(seed(K+"c")),DK=DECKS[Math.floor(R3()*DECKS.length)],MI=Math.floor(R3()*8),MISS=cd(DK[1][MI]);
+const AVG=(DK[1].reduce((s,n)=>s+cd(n)[1],0)/8).toFixed(1);
+const pool=C.filter(c=>!DK[1].includes(c[0]));let opts=[MISS];
+while(opts.length<4){const c=pool[Math.floor(R3()*pool.length)];if(!opts.includes(c))opts.push(c)}
+opts.sort((a,b)=>seed(K+a[0])-seed(K+b[0]));
+const R4=mulberry(seed(K+"d")),PAIRS=[];
+while(PAIRS.length<5){const a=C[Math.floor(R4()*C.length)];const cand=C.filter(c=>Math.abs(c[1]-a[1])===1&&!PAIRS.some(p=>p.includes(c)||p.includes(a)));if(!cand.length)continue;const b=cand[Math.floor(R4()*cand.length)];PAIRS.push(R4()<.5?[a,b]:[b,a])}
+const fmt=s=>Math.floor(s/60)+":"+pad(s%60);
+let tab=0;
+const cardDone=()=>D.g.includes(T[0])||D.g.length>=6;
+const won=()=>D.g.includes(T[0]);
+const hlDone=()=>D.h&&D.h.length>=5;
+const hlScore=()=>(D.h||[]).filter((n,k)=>{const r=PAIRS[k];return n===(r[0][1]>r[1][1]?r[0][0]:r[1][0])}).length;
+const prog=()=>(cardDone()?3:0)+(D.e?3:0)+(D.d?3:0)+(hlDone()?3:0);
+
+function renderBar(){
+  $("#sub").textContent="Puzzle #"+num+" · new puzzles every day";
+  $("#stats").innerHTML="Streak <b>"+S.streak+"</b><br>Sparks <b>"+S.pts+"</b>";
+  const p=prog();$("#bar").innerHTML=Array.from({length:12},(_,i)=>'<div class="pip'+(i<p?" on":"")+'"></div>').join("");
+  $("#cap").textContent=p>=12?"Your elixir is full. Open today’s chest below.":"Finish all four puzzles to fill your elixir and open today’s chest.";
+}
+function arrow(a,b){return a===b?"":(b>a?" ↑":" ↓")}
+function renderGuess(){
+  const v=$("#view");
+  let h='<div><b>Which card is it?</b><div class="small">6 guesses. Arrows point toward the answer.</div></div>';
+  if(!cardDone()){
+    h+='<div class="row"><input id="gi" list="cl" placeholder="Type a card name" autocomplete="off"><button class="go" id="gb">Guess</button></div><datalist id="cl">'+C.map(c=>'<option value="'+c[0]+'">').join("")+'</datalist><div class="small" id="ge" style="margin-top:6px"></div>';
+  }
+  h+='<div class="g h"><span>Card</span><span>Elixir</span><span>Type</span><span>Rarity</span></div>';
+  D.g.forEach(n=>{
+    const c=C.find(x=>x[0]===n);
+    h+='<div class="g"><div class="t '+(c[0]===T[0]?"ok":"")+'">'+c[0]+'</div><div class="t '+(c[1]===T[1]?"ok":"no")+'">'+c[1]+arrow(c[1],T[1])+'</div><div class="t '+(c[2]===T[2]?"ok":"no")+'">'+c[2]+'</div><div class="t '+(c[3]===T[3]?"ok":"no")+'">'+c[3]+arrow(RO[c[3]],RO[T[3]])+'</div></div>';
+  });
+  if(cardDone())h+='<div class="msg">'+(won()?"Got it in "+D.g.length+"/6. The card was "+T[0]+".":"Out of guesses. The card was "+T[0]+".")+'</div>';
+  v.innerHTML=h;
+  if(!cardDone()){
+    const go=()=>{
+      const val=$("#gi").value.trim().toLowerCase(),c=C.find(x=>x[0].toLowerCase()===val);
+      if(!c){$("#ge").textContent="Pick a card from the list.";return}
+      if(D.g.includes(c[0])){$("#ge").textContent="You already guessed that card.";return}
+      D.g.push(c[0]);save();renderAll();
+    };
+    $("#gb").onclick=go;$("#gi").onkeydown=ev=>{if(ev.key==="Enter")go()};
+  }
+}
+function renderCount(){
+  let h='<div><b>How much elixir does your opponent have?</b><div class="small">They start with 5, gain 1 every 2.8 seconds, and cap at 10. Each card costs its elixir when played. Ignore cycling and double elixir.</div></div><div style="margin-top:8px">';
+  h+=ev.map(x=>'<div class="ev"><span>'+fmt(x[0])+'</span><span>Plays '+x[1]+'</span><span>'+x[2]+'</span></div>').join("")+"</div>";
+  h+='<div class="msg">At '+fmt(ENDT)+', how much elixir do they have?</div>';
+  if(!D.e){
+    h+='<div class="nums">'+Array.from({length:11},(_,i)=>'<button data-n="'+i+'">'+i+'</button>').join("")+"</div>";
+  }else{
+    const d=Math.abs(D.e.a-ANS);
+    h+='<div class="msg">'+(d===0?"Exactly right. They had "+ANS+".":d===1?"So close. They had "+ANS+" (you said "+D.e.a+").":"Not quite. They had "+ANS+" (you said "+D.e.a+").")+'</div>';
+  }
+  $("#view").innerHTML=h;
+  document.querySelectorAll(".nums button").forEach(b=>b.onclick=()=>{D.e={a:+b.dataset.n};save();renderAll()});
+}
+function renderDeck(){
+  let h='<div><b>Which card is missing from this deck?</b><div class="small">Average elixir of the full 8-card deck: '+AVG+'. These are classic archetypes, not necessarily today’s meta.</div></div><div style="margin-top:8px">';
+  DK[1].forEach((n,i)=>{const c=cd(n);h+=(i===MI&&!D.d)?'<div class="ev"><span>?</span><span>Missing card</span><span>?</span></div>':'<div class="ev"><span>'+c[2]+'</span><span>'+c[0]+'</span><span>'+c[1]+'</span></div>'});
+  h+='</div>';
+  if(!D.d)h+='<div class="nums" style="grid-template-columns:1fr 1fr">'+opts.map(c=>'<button data-c="'+c[0]+'">'+c[0]+'</button>').join("")+'</div>';
+  else h+='<div class="msg">'+(D.d.pick===MISS[0]?"Correct! ":"Not quite. ")+"The missing card was "+MISS[0]+" in a "+DK[0]+" deck.</div>";
+  $("#view").innerHTML=h;
+  document.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{D.d={pick:b.dataset.c};save();renderAll()});
+}
+function renderHL(){
+  const p=D.h||[],i=p.length;
+  let h='<div><b>Which card costs more elixir?</b><div class="small">5 rounds. Each pair is exactly 1 elixir apart.</div></div><div style="margin-top:8px">';
+  p.forEach((n,k)=>{const r=PAIRS[k],w=r[0][1]>r[1][1]?r[0]:r[1];h+='<div class="ev"><span>'+(n===w[0]?"✅":"❌")+'</span><span>'+r[0][0]+' ('+r[0][1]+') vs '+r[1][0]+' ('+r[1][1]+')</span><span></span></div>'});
+  h+='</div>';
+  if(i<5)h+='<div class="msg">Round '+(i+1)+' of 5</div><div class="nums" style="grid-template-columns:1fr 1fr">'+PAIRS[i].map(c=>'<button data-h="'+c[0]+'">'+c[0]+'</button>').join("")+'</div>';
+  else h+='<div class="msg">You got '+hlScore()+'/5.</div>';
+  $("#view").innerHTML=h;
+  document.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{D.h=(D.h||[]).concat(b.dataset.h);save();renderAll()});
+}
+function shareText(){
+  const d=D.e?Math.abs(D.e.a-ANS):9;
+  return "Elixir Daily #"+num+"\nCard: "+(won()?D.g.length:"X")+"/6\nElixir count: "+(d===0?"🟩":d===1?"🟨":"🟥")+"\nDeck detective: "+(D.d&&D.d.pick===MISS[0]?"🟩":"🟥")+"\nHigher/lower: "+hlScore()+"/5\nStreak: "+S.streak+" 🔥";
+}
+function renderChest(){
+  const c=$("#chest");
+  if(prog()<12){c.innerHTML="";return}
+  if(!D.chest){c.innerHTML='<button class="go" id="ob">Open today’s chest</button>';
+    $("#ob").onclick=()=>{
+      let pts=20+(won()?Math.max(0,7-D.g.length)*5:0)+(D.e?(Math.abs(D.e.a-ANS)===0?20:Math.abs(D.e.a-ANS)===1?10:0):0)+(D.d&&D.d.pick===MISS[0]?15:0)+hlScore()*4;
+      const left=TITLES.filter(x=>!S.titles.includes(x));let title=null;
+      if(left.length&&Math.random()<.4){title=left[Math.floor(Math.random()*left.length)];S.titles.push(title)}
+      S.streak=(S.last===PK)?S.streak+1:1;S.last=K;S.pts+=pts;D.chest={pts,title};save();postScore();renderAll();
+    };return}
+  c.innerHTML='<div class="reward">+'+D.chest.pts+' Sparks'+(D.chest.title?' and the title “'+D.chest.title+'”':"")+'</div><button class="go" id="sh">Share result</button><pre id="sp" hidden></pre><div class="small" style="margin-top:8px">Come back tomorrow for new puzzles and to keep your streak.</div>';
+  $("#sh").onclick=async()=>{
+    const s=shareText();
+    try{await navigator.clipboard.writeText(s);$("#sh").textContent="Copied"}
+    catch(err){const p=$("#sp");p.textContent=s;p.hidden=false}
+  };
+}
+function renderTitles(){
+  $("#titles").innerHTML=S.titles.length?"Your titles: "+S.titles.map(x=>"<span>"+x+"</span>").join(""):"Chests can unlock titles. Collect all "+TITLES.length+".";
+}
+function renderAll(){
+  renderBar();
+  tab===0?renderGuess():tab===1?renderCount():tab===2?renderDeck():renderHL();
+  document.querySelectorAll(".tabs button").forEach((b,i)=>b.setAttribute("aria-selected",i===tab));
+  renderChest();renderTitles();
+}
+$("#tab0").onclick=()=>{tab=0;renderAll()};
+$("#tab1").onclick=()=>{tab=1;renderAll()};
+$("#tab2").onclick=()=>{tab=2;renderAll()};
+$("#tab3").onclick=()=>{tab=3;renderAll()};
+function applyTheme(){if(S.theme)document.documentElement.setAttribute("data-theme",S.theme)}
+$("#tg").onclick=()=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;S.theme=dark?"light":"dark";applyTheme();save()};
+applyTheme();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let LB=null,UID=null;
+function postScore(){if(LB&&UID)LB.db.collection("scores").doc(UID).set({pts:S.pts,streak:S.streak}).catch(()=>{})}
+async function initLB(){
+  try{
+    const u=await claude.use("user"),db=await claude.use("db");
+    if(!u||!db)return;
+    UID=await u.id();if(!UID)return;
+    LB={db,u};
+    const box=$("#lb");box.hidden=false;
+    db.collection("scores").orderBy("pts","desc").limit(10).onSnapshot(async snap=>{
+      const rows=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+      let ps={};try{ps=await u.profiles(rows.map(r=>r.id))}catch(e){}
+      box.innerHTML='<h2>Leaderboard</h2>'+(rows.length?'<ol>'+rows.map(r=>'<li>'+esc((ps[r.id]&&ps[r.id].name)||"Player")+(r.id===UID?" (you)":"")+' – '+esc(r.pts)+' Sparks, streak '+esc(r.streak)+'</li>').join("")+'</ol>':'<div class="small">No scores yet.</div>')+'<button class="go" id="ps">Post my score</button><div class="small" style="margin-top:6px">Shows people who open this page while signed in.</div>';
+      $("#ps").onclick=postScore;
+    },()=>{});
+  }catch(e){}
+}
+initLB();
+renderAll();
+</script>
+</body>
+</html>
